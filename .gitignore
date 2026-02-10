@@ -1,0 +1,20 @@
+# Builds
+build/
+build_mg2d/
+
+# Logs
+*.log
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+
+# VirtualBox shared folder if it comes back
+sf_borne_arcade/
+
+# Generated documentation (can be regenerated)
+docs-site/
+
+# Temporary files
+*~
+*.tmp

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+
+echo "== Git post-merge: mise à jour de la borne =="
+bash scripts/update.sh
