@@ -11,7 +11,7 @@ echo "Veuillez patienter"
 echo "Lancement du  Menu"
 echo "Veuillez patienter"
 
-java -cp .:/home/pi/git/MG2D Main
+java -cp .:../../../MG2D Main
 
 ./clean.sh
 
