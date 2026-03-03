@@ -1,20 +1,28 @@
-# Builds
+# ===== Build =====
 build/
 build_mg2d/
+*.class
 
-# Logs
+# ===== Documentation générée =====
+docs-site/site/
+docs-site/javadoc/
+
+# ===== Logs =====
+logs/
 *.log
+run.log
 
-# OS / Editor
-.DS_Store
-Thumbs.db
+# ===== MG2D externe =====
+../MG2D/
+MG2D/
 
-# VirtualBox shared folder if it comes back
-sf_borne_arcade/
-
-# Generated documentation (can be regenerated)
-docs-site/
-
-# Temporary files
+# ===== Fichiers temporaires =====
 *~
-*.tmp
+*.swp
+*.swo
+.~lock*
+.DS_Store
+
+# ===== Python =====
+__pycache__/
+*.pyc
