@@ -46,4 +46,7 @@ else
   echo "Pour relancer manuellement : ./scripts/run.sh"
 fi
 
+echo "== Génération documentation =="
+,/scripts/gen_docs.sh || true
+
 echo "=== UPDATE terminé ==="

@@ -1,28 +1,27 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUT_DIR="$PROJECT_DIR/docs-site"
-JAVADOC_DIR="$OUT_DIR/javadoc"
-MD_DIR="$OUT_DIR/markdown"
+DOCS_OUTPUT="$PROJECT_DIR/docs-site"
 
-echo "== Génération documentation =="
-rm -rf "$OUT_DIR"
-mkdir -p "$JAVADOC_DIR" "$MD_DIR"
+echo "== Nettoyage ancien site =="
+rm -rf "$DOCS_OUTPUT"
 
-echo "== Copie des docs Markdown =="
-if [ -d "$PROJECT_DIR/docs" ]; then
-  cp -r "$PROJECT_DIR/docs/." "$MD_DIR/"
-else
-  echo "ATTENTION: dossier docs/ introuvable, copie des .md racine."
-  cp "$PROJECT_DIR"/*.md "$MD_DIR/" 2>/dev/null || true
-fi
+echo "== Génération Javadoc =="
 
-echo "== Génération Javadoc (doc technique) =="
-# On ne documente que le menu (les .java à la racine)
-find "$PROJECT_DIR" -maxdepth 1 -name "*.java" -print0 | \
-  xargs -0 javadoc -d "$JAVADOC_DIR" -encoding UTF-8 -charset UTF-8 -docencoding UTF-8
+mkdir -p "$DOCS_OUTPUT/javadoc"
 
-echo "OK: Documentation générée dans $OUT_DIR"
-echo "- Markdown: $MD_DIR"
-echo "- Javadoc:  $JAVADOC_DIR"
+javadoc \
+  -d "$DOCS_OUTPUT/javadoc" \
+  -classpath "$PROJECT_DIR/build:$PROJECT_DIR/../MG2D/build_mg2d" \
+  -Xdoclint:none \
+  -quiet \
+  $(find "$PROJECT_DIR" -maxdepth 1 -name "*.java") \
+  || true
+
+echo "== Génération site MkDocs =="
+mkdocs build --site-dir "$DOCS_OUTPUT/site"
+
+echo "== Documentation générée dans :"
+echo "   - $DOCS_OUTPUT/site"
+echo "   - $DOCS_OUTPUT/javadoc"

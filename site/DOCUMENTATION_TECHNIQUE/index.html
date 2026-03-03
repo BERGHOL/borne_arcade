@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Documentation technique - Borne Arcade</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Documentation technique";
+        var mkdocs_page_input_path = "DOCUMENTATION_TECHNIQUE.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Borne Arcade
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../README.md">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../INSTALLATION/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../DEPLOIEMENT_GIT/">Déploiement Git</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Documentation technique</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-objectif-du-projet">1. Objectif du projet</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-architecture-generale-du-projet">2. Architecture générale du projet</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-bibliotheque-mg2d">3. Bibliothèque MG2D</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#regle-imposee-par-lenseignant">Règle imposée par l’enseignant</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-probleme-de-compatibilite-audio">4. Problème de compatibilité audio</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#contraintes">Contraintes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#solution-de-maintenance-adoptee">Solution de maintenance adoptée</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-scripts-dautomatisation">5. Scripts d’automatisation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#51-installsh">5.1 install.sh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#52-buildsh">5.2 build.sh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#53-runsh">5.3 run.sh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#54-testsh">5.4 test.sh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#55-updatesh">5.5 update.sh</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-generation-automatique-de-la-documentation">6. Génération automatique de la documentation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7-deploiement-automatique-via-git">7. Déploiement automatique via Git</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#8-installation-sur-une-borne-ou-une-vm">8. Installation sur une borne ou une VM</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-copier-ou-cloner-le-projet">1. Copier ou cloner le projet</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-installer-les-dependances">2. Installer les dépendances</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-tester-le-projet">3. Tester le projet</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-lancer-le-menu">4. Lancer le menu</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#9-tests-realises">9. Tests réalisés</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#10-montee-de-version-du-systeme">10. Montée de version du système</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#11-limites-connues">11. Limites connues</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#12-conclusion">12. Conclusion</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../AJOUT_JEU/">Ajouter un jeu</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../UTILISATEUR/">Utilisateur</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Borne Arcade</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Documentation technique</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="documentation-technique-borne-darcade">Documentation technique — Borne d’arcade</h1>
+<h2 id="1-objectif-du-projet">1. Objectif du projet</h2>
+<p>Le projet consiste à maintenir et moderniser le logiciel de la borne d’arcade du département informatique.</p>
+<p>Les objectifs principaux sont :</p>
+<ul>
+<li>Restaurer un projet dont le dépôt d’origine a été perdu.</li>
+<li>Automatiser la compilation et l’installation.</li>
+<li>Générer automatiquement la documentation.</li>
+<li>Permettre le déploiement automatique via Git.</li>
+<li>Rendre le système compatible avec des versions récentes de l’OS et de Java.</li>
+</ul>
+<hr />
+<h2 id="2-architecture-generale-du-projet">2. Architecture générale du projet</h2>
+<p>Structure principale du projet :</p>
+<pre><code>borne_arcade/
+├── build/                → classes compilées du menu
+├── build_mg2d/           → classes compilées de la bibliothèque MG2D
+├── docs/                 → documentation Markdown
+├── docs-site/            → documentation générée automatiquement
+├── img/                  → images utilisées par le menu
+├── fonts/                → polices utilisées par le menu
+├── sound/                → sons et musiques
+├── projet/               → dossiers des jeux
+├── scripts/              → scripts d’automatisation
+├── .githooks/            → hooks Git pour déploiement automatique
+├── Main.java             → point d’entrée du menu
+└── *.java                → code source du menu
+</code></pre>
+<hr />
+<h2 id="3-bibliotheque-mg2d">3. Bibliothèque MG2D</h2>
+<p>Le menu de la borne utilise la bibliothèque graphique :</p>
+<ul>
+<li><strong>MG2D</strong></li>
+</ul>
+<p>Cette bibliothèque est considérée comme <strong>externe</strong>.</p>
+<h3 id="regle-imposee-par-lenseignant">Règle imposée par l’enseignant</h3>
+<blockquote>
+<p>Le code de MG2D ne doit pas être modifié.</p>
+</blockquote>
+<p>Toutes les adaptations ont donc été faites <strong>uniquement dans le code de la borne</strong>.</p>
+<hr />
+<h2 id="4-probleme-de-compatibilite-audio">4. Problème de compatibilité audio</h2>
+<p>Lors du passage à une version récente de Java (Java 21), le système audio de MG2D provoquait un crash au démarrage.</p>
+<p>Erreur observée :</p>
+<pre><code>unable to load resource 'sfd.ser'
+at MG2D.audio.decoder.SynthesisFilter
+</code></pre>
+<p>Cause :</p>
+<ul>
+<li>MG2D utilise JavaLayer pour lire les fichiers MP3.</li>
+<li>JavaLayer dépend d’une ressource interne : <code>sfd.ser</code>.</li>
+<li>Cette ressource n’est plus correctement chargée avec les versions récentes de Java.</li>
+</ul>
+<h3 id="contraintes">Contraintes</h3>
+<ul>
+<li>MG2D ne doit pas être modifié.</li>
+<li>Il est donc impossible de corriger la bibliothèque directement.</li>
+</ul>
+<h3 id="solution-de-maintenance-adoptee">Solution de maintenance adoptée</h3>
+<ul>
+<li>Désactivation de la musique de fond dans <code>Graphique.java</code>.</li>
+<li>Le menu fonctionne sans audio.</li>
+<li>Le système est stable sur les versions récentes de Java.</li>
+</ul>
+<p>Cette solution est conforme à une démarche de maintenance logicielle.</p>
+<hr />
+<h2 id="5-scripts-dautomatisation">5. Scripts d’automatisation</h2>
+<p>Tous les scripts se trouvent dans le dossier :</p>
+<pre><code>scripts/
+</code></pre>
+<h3 id="51-installsh">5.1 install.sh</h3>
+<p>Installe les dépendances nécessaires :</p>
+<ul>
+<li>Java (OpenJDK)</li>
+<li>outils de base</li>
+</ul>
+<p>Commande :</p>
+<pre><code>./scripts/install.sh
+</code></pre>
+<hr />
+<h3 id="52-buildsh">5.2 build.sh</h3>
+<p>Compile :</p>
+<ul>
+<li>la bibliothèque MG2D</li>
+<li>le menu de la borne</li>
+</ul>
+<p>Commande :</p>
+<pre><code>./scripts/build.sh
+</code></pre>
+<hr />
+<h3 id="53-runsh">5.3 run.sh</h3>
+<p>Lance le menu de la borne.</p>
+<p>Commande :</p>
+<pre><code>./scripts/run.sh
+</code></pre>
+<hr />
+<h3 id="54-testsh">5.4 test.sh</h3>
+<p>Effectue des tests de base :</p>
+<ul>
+<li>vérification des jeux</li>
+<li>compilation du projet</li>
+</ul>
+<p>Commande :</p>
+<pre><code>./scripts/test.sh
+</code></pre>
+<hr />
+<h3 id="55-updatesh">5.5 update.sh</h3>
+<p>Script exécuté automatiquement après un <code>git pull</code>.</p>
+<p>Fonctions :</p>
+<ul>
+<li>mise à jour du projet</li>
+<li>recompilation automatique</li>
+<li>redémarrage du service si nécessaire</li>
+</ul>
+<p>Commande manuelle :</p>
+<pre><code>./scripts/update.sh
+</code></pre>
+<hr />
+<h2 id="6-generation-automatique-de-la-documentation">6. Génération automatique de la documentation</h2>
+<p>Script utilisé :</p>
+<pre><code>scripts/gen_docs.ps1
+</code></pre>
+<p>Fonctions :</p>
+<ul>
+<li>copie des fichiers Markdown</li>
+<li>génération de la Javadoc</li>
+<li>création du site de documentation dans :</li>
+</ul>
+<pre><code>docs-site/
+</code></pre>
+<p>Commande :</p>
+<pre><code>powershell -ExecutionPolicy Bypass -File scripts/gen_docs.ps1
+</code></pre>
+<hr />
+<h2 id="7-deploiement-automatique-via-git">7. Déploiement automatique via Git</h2>
+<p>Le projet contient un dossier :</p>
+<pre><code>.githooks/
+</code></pre>
+<p>Hooks utilisés :</p>
+<ul>
+<li><code>post-merge</code></li>
+<li><code>post-checkout</code></li>
+</ul>
+<p>Ces hooks exécutent automatiquement :</p>
+<pre><code>scripts/update.sh
+</code></pre>
+<p>Après un :</p>
+<pre><code>git pull
+</code></pre>
+<p>La borne :</p>
+<ol>
+<li>met à jour les fichiers</li>
+<li>recompile le projet</li>
+<li>redémarre le menu si nécessaire</li>
+</ol>
+<hr />
+<h2 id="8-installation-sur-une-borne-ou-une-vm">8. Installation sur une borne ou une VM</h2>
+<p>Procédure :</p>
+<h3 id="1-copier-ou-cloner-le-projet">1. Copier ou cloner le projet</h3>
+<pre><code>git clone &lt;repo&gt;
+cd borne_arcade
+</code></pre>
+<p>ou copier le dossier.</p>
+<h3 id="2-installer-les-dependances">2. Installer les dépendances</h3>
+<pre><code>./scripts/install.sh
+</code></pre>
+<h3 id="3-tester-le-projet">3. Tester le projet</h3>
+<pre><code>./scripts/test.sh
+</code></pre>
+<h3 id="4-lancer-le-menu">4. Lancer le menu</h3>
+<pre><code>./scripts/run.sh
+</code></pre>
+<hr />
+<h2 id="9-tests-realises">9. Tests réalisés</h2>
+<p>Les tests ont été effectués :</p>
+<ul>
+<li>sur une machine virtuelle Debian</li>
+<li>avec une version récente de Java</li>
+</ul>
+<p>Tests validés :</p>
+<ul>
+<li>compilation automatique</li>
+<li>lancement du menu</li>
+<li>ajout d’un jeu</li>
+<li>génération de la documentation</li>
+<li>scripts d’installation et de test</li>
+</ul>
+<hr />
+<h2 id="10-montee-de-version-du-systeme">10. Montée de version du système</h2>
+<p>Objectif :</p>
+<ul>
+<li>passer d’une ancienne version de Raspbian</li>
+<li>à une version récente de Raspberry Pi OS</li>
+</ul>
+<p>Procédure :</p>
+<ol>
+<li>Installation manuelle du nouvel OS (Raspberry Pi Imager).</li>
+<li>Création de l’utilisateur <code>arcade</code>.</li>
+<li>Installation automatique du projet avec <code>install.sh</code>.</li>
+<li>Configuration du démarrage automatique.</li>
+</ol>
+<hr />
+<h2 id="11-limites-connues">11. Limites connues</h2>
+<ul>
+<li>Audio désactivé à cause d’une incompatibilité MG2D / Java récent.</li>
+<li>MG2D non modifié conformément aux consignes.</li>
+</ul>
+<hr />
+<h2 id="12-conclusion">12. Conclusion</h2>
+<p>Le projet a été :</p>
+<ul>
+<li>restauré</li>
+<li>automatisé</li>
+<li>documenté</li>
+<li>rendu compatible avec des systèmes modernes</li>
+</ul>
+<p>La borne peut désormais être :</p>
+<ul>
+<li>installée automatiquement</li>
+<li>mise à jour via Git</li>
+<li>utilisée sur un OS récent</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../DEPLOIEMENT_GIT/" class="btn btn-neutral float-left" title="Déploiement Git"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../AJOUT_JEU/" class="btn btn-neutral float-right" title="Ajouter un jeu">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../DEPLOIEMENT_GIT/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../AJOUT_JEU/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

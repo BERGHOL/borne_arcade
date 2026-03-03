@@ -1,0 +1,12 @@
+site_name: Borne Arcade
+site_description: Documentation complète du projet borne d'arcade
+theme:
+  name: readthedocs
+
+nav:
+  - Accueil: README.md
+  - Installation: INSTALLATION.md
+  - Déploiement Git: DEPLOIEMENT_GIT.md
+  - Documentation technique: DOCUMENTATION_TECHNIQUE.md
+  - Ajouter un jeu: AJOUT_JEU.md
+  - Utilisateur: UTILISATEUR.md

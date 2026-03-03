@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Utilisateur - Borne Arcade</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Utilisateur";
+        var mkdocs_page_input_path = "UTILISATEUR.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Borne Arcade
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="" href="../README.md">Accueil</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../INSTALLATION/">Installation</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../DEPLOIEMENT_GIT/">Déploiement Git</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../DOCUMENTATION_TECHNIQUE/">Documentation technique</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../AJOUT_JEU/">Ajouter un jeu</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Utilisateur</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-demarrage">1) Démarrage</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-navigation-dans-le-menu">2) Navigation dans le menu</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-lancer-un-jeu">3) Lancer un jeu</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-quitter-la-borne-fermer-le-menu">4) Quitter la borne (fermer le menu)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-si-un-jeu-ne-se-lance-pas">5) Si un jeu ne se lance pas</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-remarques-techniques-utile-pour-lutilisateur-avance">6) Remarques techniques (utile pour l’utilisateur avancé)</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Borne Arcade</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Utilisateur</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="documentation-utilisateur-borne-darcade">Documentation utilisateur — Borne d’arcade</h1>
+<p>Cette borne affiche un menu permettant de lancer différents jeux.</p>
+<hr />
+<h2 id="1-demarrage">1) Démarrage</h2>
+<ul>
+<li>La borne démarre sur le menu principal.</li>
+<li>Le menu liste les jeux disponibles (ceux présents dans le dossier <code>projet/</code>).</li>
+</ul>
+<hr />
+<h2 id="2-navigation-dans-le-menu">2) Navigation dans le menu</h2>
+<ul>
+<li>Utiliser le joystick du joueur 1 pour monter/descendre dans la liste.</li>
+<li>Le jeu sélectionné est mis en évidence.</li>
+</ul>
+<hr />
+<h2 id="3-lancer-un-jeu">3) Lancer un jeu</h2>
+<ul>
+<li>Appuyer sur le bouton <strong>A (J1)</strong> pour lancer le jeu sélectionné.</li>
+<li>Le menu lance alors un script <code>./NomDuJeu.sh</code> et attend que le jeu se termine.</li>
+<li>Quand le jeu se ferme correctement, retour automatique au menu.</li>
+</ul>
+<hr />
+<h2 id="4-quitter-la-borne-fermer-le-menu">4) Quitter la borne (fermer le menu)</h2>
+<ul>
+<li>Appuyer sur <strong>Z (J1)</strong> pour demander la fermeture.</li>
+<li>Une confirmation s’affiche.</li>
+<li>Appuyer sur <strong>A (J1)</strong> pour confirmer.</li>
+</ul>
+<p>Selon la configuration, la fermeture peut :
+- quitter uniquement l’application, ou
+- provoquer l’arrêt du système (si le script de lancement le fait).</p>
+<hr />
+<h2 id="5-si-un-jeu-ne-se-lance-pas">5) Si un jeu ne se lance pas</h2>
+<p>Vérifier :
+- que le dossier du jeu existe : <code>projet/NomDuJeu/</code>
+- que le script existe à la racine : <code>NomDuJeu.sh</code>
+- sur Raspberry Pi / Linux : que le script est exécutable :
+  - <code>chmod +x NomDuJeu.sh</code></p>
+<hr />
+<h2 id="6-remarques-techniques-utile-pour-lutilisateur-avance">6) Remarques techniques (utile pour l’utilisateur avancé)</h2>
+<ul>
+<li>Les commandes joystick/boutons peuvent dépendre du mapping clavier “borne”.</li>
+<li>Le menu attend la fin du jeu : si un jeu ne propose pas de sortie, il peut sembler bloqué.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../AJOUT_JEU/" class="btn btn-neutral float-left" title="Ajouter un jeu"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../AJOUT_JEU/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
