@@ -6,104 +6,96 @@ Le projet consiste à maintenir et moderniser le logiciel de la borne d’arcade
 
 Les objectifs principaux sont :
 
-* Restaurer un projet dont le dépôt d’origine a été perdu.
-* Automatiser la compilation et l’installation.
-* Générer automatiquement la documentation.
-* Permettre le déploiement automatique via Git.
-* Rendre le système compatible avec des versions récentes de l’OS et de Java.
+- Restaurer un projet dont le dépôt d’origine a été perdu.
+- Automatiser la compilation et l’installation.
+- Générer automatiquement la documentation.
+- Permettre le déploiement automatique via Git.
+- Rendre le système compatible avec des versions récentes de Raspberry Pi OS et de Java.
+- Garantir une maintenance durable et autonome dans le temps.
 
 ---
 
 ## 2. Architecture générale du projet
 
-Structure principale du projet :
+Structure principale :
 
-```
 borne_arcade/
 ├── build/                → classes compilées du menu
 ├── build_mg2d/           → classes compilées de la bibliothèque MG2D
 ├── docs/                 → documentation Markdown
 ├── docs-site/            → documentation générée automatiquement
-├── img/                  → images utilisées par le menu
-├── fonts/                → polices utilisées par le menu
+├── img/                  → images du menu
+├── fonts/                → polices utilisées
 ├── sound/                → sons et musiques
 ├── projet/               → dossiers des jeux
 ├── scripts/              → scripts d’automatisation
-├── .githooks/            → hooks Git pour déploiement automatique
+├── .githooks/            → hooks Git (auto update)
 ├── Main.java             → point d’entrée du menu
-└── *.java                → code source du menu
-```
+└── autres fichiers .java → code source du menu
 
 ---
 
 ## 3. Bibliothèque MG2D
 
-Le menu de la borne utilise la bibliothèque graphique :
+Le menu utilise la bibliothèque graphique MG2D.
 
-* **MG2D**
+Règle imposée :
+Le code de MG2D ne doit pas être modifié.
 
-Cette bibliothèque est considérée comme **externe**.
+Toutes les adaptations ont été réalisées uniquement dans le code de la borne.
 
-### Règle imposée par l’enseignant
-
-> Le code de MG2D ne doit pas être modifié.
-
-Toutes les adaptations ont donc été faites **uniquement dans le code de la borne**.
+MG2D est clonée automatiquement lors de l’installation si elle n’est pas présente.
 
 ---
 
-## 4. Problème de compatibilité audio
+## 4. Problème de compatibilité audio (Java récent)
 
-Lors du passage à une version récente de Java (Java 21), le système audio de MG2D provoquait un crash au démarrage.
+Lors du passage à Java 21, une erreur empêchait le lancement :
 
-Erreur observée :
-
-```
 unable to load resource 'sfd.ser'
 at MG2D.audio.decoder.SynthesisFilter
-```
 
 Cause :
 
-* MG2D utilise JavaLayer pour lire les fichiers MP3.
-* JavaLayer dépend d’une ressource interne : `sfd.ser`.
-* Cette ressource n’est plus correctement chargée avec les versions récentes de Java.
+- MG2D utilise JavaLayer pour lire les fichiers MP3.
+- JavaLayer dépend d’une ressource interne (sfd.ser) qui n’est plus correctement chargée avec les versions modernes de Java.
 
-### Contraintes
+Contraintes :
 
-* MG2D ne doit pas être modifié.
-* Il est donc impossible de corriger la bibliothèque directement.
+- MG2D ne doit pas être modifiée.
+- La bibliothèque est considérée comme externe.
 
-### Solution de maintenance adoptée
+Solution adoptée :
 
-* Désactivation de la musique de fond dans `Graphique.java`.
-* Le menu fonctionne sans audio.
-* Le système est stable sur les versions récentes de Java.
+- Désactivation de la musique de fond dans Graphique.java.
+- Suppression de l’initialisation audio problématique.
+- Le menu fonctionne sans musique.
 
-Cette solution est conforme à une démarche de maintenance logicielle.
+Cette solution respecte la consigne et assure la stabilité.
 
 ---
 
 ## 5. Scripts d’automatisation
 
-Tous les scripts se trouvent dans le dossier :
+Tous les scripts se trouvent dans :
 
-```
 scripts/
-```
 
 ### 5.1 install.sh
 
-Installe les dépendances nécessaires :
+Installe automatiquement :
 
-* Java (OpenJDK)
-* outils de base
+- OpenJDK
+- Python3
+- Love2D
+- xdotool
+- Git
+- Clonage automatique de MG2D
+- Compilation du projet
 
 Commande :
 
-```
 ./scripts/install.sh
-```
 
 ---
 
@@ -111,59 +103,53 @@ Commande :
 
 Compile :
 
-* la bibliothèque MG2D
-* le menu de la borne
+- MG2D
+- Le menu de la borne
 
 Commande :
 
-```
 ./scripts/build.sh
-```
 
 ---
 
 ### 5.3 run.sh
 
-Lance le menu de la borne.
+Lance le menu principal.
 
 Commande :
 
-```
 ./scripts/run.sh
-```
 
 ---
 
-### 5.4 test.sh
+### 5.4 check_games.sh
 
-Effectue des tests de base :
+Vérifie :
 
-* vérification des jeux
-* compilation du projet
+- Présence des scripts .sh pour chaque jeu
+- Cohérence des dépendances
 
 Commande :
 
-```
-./scripts/test.sh
-```
+./scripts/check_games.sh
 
 ---
 
 ### 5.5 update.sh
 
-Script exécuté automatiquement après un `git pull`.
+Exécuté automatiquement après un git pull.
 
 Fonctions :
 
-* mise à jour du projet
-* recompilation automatique
-* redémarrage du service si nécessaire
+- Vérification MG2D
+- Réapplication des permissions (chmod +x)
+- Rebuild automatique
+- Génération documentation
+- Redémarrage du service systemd
 
 Commande manuelle :
 
-```
 ./scripts/update.sh
-```
 
 ---
 
@@ -171,145 +157,184 @@ Commande manuelle :
 
 Script utilisé :
 
-```
-scripts/gen_docs.ps1
-```
+scripts/gen_docs.sh
 
 Fonctions :
 
-* copie des fichiers Markdown
-* génération de la Javadoc
-* création du site de documentation dans :
+- Génération Javadoc
+- Construction du site MkDocs
+- Copie des fichiers Markdown
 
-```
+Documentation générée dans :
+
 docs-site/
-```
 
 Commande :
 
-```
-powershell -ExecutionPolicy Bypass -File scripts/gen_docs.ps1
-```
+./scripts/gen_docs.sh
 
 ---
 
 ## 7. Déploiement automatique via Git
 
-Le projet contient un dossier :
+Le projet contient :
 
-```
 .githooks/
-```
 
 Hooks utilisés :
 
-* `post-merge`
-* `post-checkout`
+- post-merge
+- post-checkout
 
 Ces hooks exécutent automatiquement :
 
-```
 scripts/update.sh
-```
 
 Après un :
 
-```
 git pull
-```
 
 La borne :
 
-1. met à jour les fichiers
-2. recompile le projet
-3. redémarre le menu si nécessaire
+1. Met à jour les fichiers
+2. Recompile automatiquement
+3. Régénère la documentation
+4. Redémarre le service
 
 ---
 
-## 8. Installation sur une borne ou une VM
+## 8. Service systemd
 
-Procédure :
+Un service Linux permet le lancement automatique au démarrage.
 
-### 1. Copier ou cloner le projet
+Fichier :
 
-```
-git clone <repo>
-cd borne_arcade
-```
+/etc/systemd/system/borne-arcade.service
 
-ou copier le dossier.
+Caractéristiques :
 
-### 2. Installer les dépendances
+- Type=simple
+- Restart=on-failure
+- WorkingDirectory défini
+- ExecStart=./scripts/run.sh
 
-```
-./scripts/install.sh
-```
+Avantages :
 
-### 3. Tester le projet
-
-```
-./scripts/test.sh
-```
-
-### 4. Lancer le menu
-
-```
-./scripts/run.sh
-```
+- Démarrage automatique
+- Redémarrage en cas de crash
+- Intégration native au système Linux
 
 ---
 
-## 9. Tests réalisés
+## 9. Cycle complet d’automatisation
 
-Les tests ont été effectués :
+Au démarrage de la borne :
 
-* sur une machine virtuelle Debian
-* avec une version récente de Java
+1. systemd lance le service.
+2. Vérification des mises à jour Git.
+3. Si mise à jour :
+   - exécution de update.sh
+   - recompilation
+   - génération documentation
+4. Lancement du menu.
+
+En cas de crash :
+- systemd redémarre automatiquement le service.
+
+Le système est autonome et auto-réparable.
+
+---
+
+## 10. Gestion des permissions
+
+Après un git pull, certaines permissions peuvent être perdues.
+
+Le script update.sh applique automatiquement :
+
+- chmod +x sur scripts/
+- chmod +x sur .githooks/
+- chmod +x sur les scripts de jeux
+
+Cela évite les erreurs de type :
+
+Permission denied
+
+---
+
+## 11. Tests réalisés
+
+Tests effectués sur :
+
+- Machine virtuelle Debian
+- Java 21
+- Environnement Raspberry simulé
 
 Tests validés :
 
-* compilation automatique
-* lancement du menu
-* ajout d’un jeu
-* génération de la documentation
-* scripts d’installation et de test
+- Compilation automatique
+- Lancement du menu
+- Ajout d’un jeu
+- Génération documentation
+- Update automatique via Git
+- Redémarrage automatique systemd
 
 ---
 
-## 10. Montée de version du système
+## 12. Montée de version du système
 
 Objectif :
 
-* passer d’une ancienne version de Raspbian
-* à une version récente de Raspberry Pi OS
+- Migration depuis ancienne version Raspbian
+- Passage vers Raspberry Pi OS récent
 
 Procédure :
 
-1. Installation manuelle du nouvel OS (Raspberry Pi Imager).
-2. Création de l’utilisateur `arcade`.
-3. Installation automatique du projet avec `install.sh`.
-4. Configuration du démarrage automatique.
+1. Installation propre du nouvel OS
+2. Création utilisateur arcade
+3. Clonage du projet
+4. Exécution de install.sh
+5. Activation du service systemd
+
+Le projet fonctionne sur un OS moderne.
 
 ---
 
-## 11. Limites connues
+## 13. Justification des choix techniques
 
-* Audio désactivé à cause d’une incompatibilité MG2D / Java récent.
-* MG2D non modifié conformément aux consignes.
+Hooks Git :
+Permettent une mise à jour automatique sans intervention humaine.
+
+systemd :
+Solution native Linux fiable pour services persistants.
+
+Désactivation audio :
+Respect de la contrainte de ne pas modifier MG2D.
+
+Scripts bash :
+Solution portable et maintenable sur Raspberry Pi OS.
 
 ---
 
-## 12. Conclusion
+## 14. Limites connues
+
+- Audio désactivé (incompatibilité MG2D / Java récent).
+- Dépendance à la bibliothèque externe MG2D.
+- Certains jeux peuvent nécessiter des dépendances spécifiques.
+
+---
+
+## 15. Conclusion
 
 Le projet a été :
 
-* restauré
-* automatisé
-* documenté
-* rendu compatible avec des systèmes modernes
+- Restauré
+- Automatisé
+- Documenté
+- Rendu compatible avec des systèmes modernes
 
 La borne peut désormais être :
 
-* installée automatiquement
-* mise à jour via Git
-* utilisée sur un OS récent
+- Installée automatiquement
+- Mise à jour via Git
+- Relancée automatiquement en cas de crash
+- Maintenue durablement dans le temps

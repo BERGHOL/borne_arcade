@@ -2,4 +2,14 @@
 set -e
 
 echo "== Git post-merge: mise à jour de la borne =="
-bash scripts/update.sh
+
+# Racine du repo git
+REPO_DIR="$(git rev-parse --show-toplevel)"
+
+cd "$REPO_DIR"
+
+if [ -x "$REPO_DIR/scripts/update.sh" ]; then
+    bash "$REPO_DIR/scripts/update.sh"
+else
+    echo "Erreur: scripts/update.sh introuvable ou non exécutable"
+fi

@@ -1,180 +1,171 @@
 # Documentation — Ajouter un nouveau jeu à la borne d’arcade
 
-Ce document explique comment ajouter un nouveau jeu à la borne, afin qu’il apparaisse dans le menu principal.
+Ce document explique comment intégrer un nouveau jeu afin qu’il soit détecté automatiquement par le menu principal.
 
 ---
 
-## 1) Comment le menu détecte les jeux
+## 1) Détection automatique des jeux
 
-Le menu Java liste automatiquement les jeux présents dans le dossier :
+Le menu Java détecte automatiquement les jeux présents dans :
 
-* `projet/`
+    projet/
 
-Chaque sous-dossier dans `projet/` correspond à **un jeu**.
-
-Exemple :
-
-* `projet/Pong/`
-* `projet/TronGame/`
-* `projet/ball-blast/`
-
----
-
-## 2) Règles obligatoires pour qu’un jeu fonctionne
-
-Pour un jeu nommé `MonJeu`, il faut **obligatoirement** :
-
-### A. Créer un dossier dans `projet/`
-
-Créer :
-projet/MonJeu/
-
-Ce dossier doit contenir les fichiers du jeu (images, sons, exécutables, sources, etc.) selon les besoins du jeu.
-
-### B. Créer un script de lancement à la racine
-
-Créer à la racine du projet (au même niveau que `Main.java`) :
-MonJeu.sh
-
-Le nom du script doit être exactement le même que le nom du dossier dans `projet/`.
+Chaque sous-dossier correspond à un jeu.
 
 Exemples :
 
-* dossier `projet/Pong/`  → script `Pong.sh`
-* dossier `projet/TronGame/` → script `TronGame.sh`
+- projet/Pong/
+- projet/TronGame/
+- projet/ball-blast/
 
 ---
 
-## 3) Règle la plus importante : le menu attend la fin du jeu
+## 2) Structure obligatoire
 
-Dans le code du menu, le lancement se fait via :
+Pour un jeu nommé `MonJeu` :
 
-* exécution de `./MonJeu.sh`
-* puis le programme attend que le processus se termine (`waitFor()`).
+### A. Dossier du jeu
 
-Conséquence :
+Créer :
 
-* Tant que le jeu tourne : le script doit rester actif.
-* Quand le jeu se termine (ou que l’utilisateur quitte) : le script doit se terminer.
-* Ensuite seulement : retour automatique au menu.
+    projet/MonJeu/
+
+Ce dossier contient les ressources du jeu (images, sons, code, etc.).
+
+### B. Script de lancement
+
+Créer à la racine du projet :
+
+    MonJeu.sh
+
+Le nom du script doit être exactement identique au nom du dossier.
+
+Exemple :
+
+- dossier : projet/Pong/
+- script : Pong.sh
+
+---
+
+## 3) Fonctionnement avec le menu
+
+Le menu lance :
+
+    ./MonJeu.sh
+
+Puis attend la fin du processus (`waitFor()`).
 
 Donc :
 
-* si ton jeu tourne en boucle → il faut une touche “quitter”
-* ou un mécanisme qui termine proprement le jeu et le script
+- Tant que le jeu tourne → le script doit rester actif
+- Quand le jeu se termine → le script doit se terminer
+- Ensuite → retour automatique au menu
+
+Si le jeu ne se ferme jamais → le menu restera bloqué.
 
 ---
 
-## 4) Exemple minimal (jeu de test)
+## 4) Script minimal de test
 
-### A. Créer le dossier
+Créer :
 
-```
-projet/TestJeu/
-```
+    projet/TestJeu/
 
-### B. Créer le script `TestJeu.sh` à la racine
+Créer `TestJeu.sh` :
 
-Contenu du script :
+    #!/usr/bin/env bash
+    set -e
+    echo "TestJeu démarre"
+    sleep 2
+    echo "TestJeu se termine"
 
-```
-#!/usr/bin/env bash
-set -e
-echo "=== TestJeu démarre ==="
-echo "Le jeu va se fermer dans 2 secondes..."
-sleep 2
-echo "=== TestJeu se termine ==="
-```
+Rendre exécutable :
 
-### C. Rendre le script exécutable (sur Linux / Raspberry Pi)
-
-```
-chmod +x TestJeu.sh
-```
-
-Test attendu :
-
-* Le jeu apparaît dans le menu
-* Le menu lance `TestJeu.sh`
-* Après 2 secondes → retour au menu
+    chmod +x TestJeu.sh
 
 ---
 
-## 5) Exemple de script pour un jeu Java
+## 5) Exemple jeu Java (avec MG2D)
 
-```
-#!/usr/bin/env bash
-set -e
-cd "$(dirname "$0")/projet/MonJeu"
-java -jar MonJeu.jar
-```
+    #!/usr/bin/env bash
+    set -e
+
+    ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+    MG2D_DIR="$(cd "$ROOT_DIR/../MG2D" && pwd)"
+
+    cd "$ROOT_DIR/projet/MonJeu"
+    java -cp ".:$MG2D_DIR" Main
 
 Important :
 
-* la commande java doit rester active tant que le jeu tourne
-* quand le jeu se ferme, le script se termine → retour menu
+- Ne pas utiliser de chemin absolu (/home/pi/...)
+- MG2D doit être référencé dynamiquement
 
 ---
 
-## 6) Exemple de script pour un jeu Python
+## 6) Exemple jeu Python
 
-```
-#!/usr/bin/env bash
-set -e
-cd "$(dirname "$0")/projet/MonJeu"
-python3 main.py
-```
+    #!/usr/bin/env bash
+    set -e
+
+    cd "$(dirname "$0")/projet/MonJeu"
+    python3 main.py
 
 Important :
 
-* utiliser python3
-* installer les dépendances du jeu si nécessaire
-* quand l’utilisateur quitte, le script doit se terminer
+- Utiliser python3 (pas python3.7)
+- Installer les dépendances nécessaires (pygame, etc.)
 
 ---
 
-## 7) Bonnes pratiques recommandées
+## 7) Dépendances système possibles
 
-* Mettre une touche “Quitter” dans le jeu (ex: ESC)
-* Éviter les chemins absolus (`/home/pi/...`)
-* Utiliser des chemins relatifs
-* Documenter les contrôles du jeu
+Selon le langage utilisé :
+
+- Java → OpenJDK
+- Python → python3 + pygame
+- Lua → love2d
+- Outils graphiques → xdotool
+
+Les dépendances doivent être installées via `install.sh`.
 
 ---
 
-## 8) Vérification automatique des jeux
+## 8) Bonnes pratiques
 
-Un script de contrôle est fourni :
+- Prévoir une touche Quitter (ESC)
+- Éviter les chemins absolus
+- Utiliser des chemins relatifs
+- Ne pas modifier la configuration système
+- Vérifier que le jeu se termine proprement
 
-```
-./scripts/check_games.sh
-```
+---
+
+## 9) Vérification automatique
+
+Exécuter :
+
+    ./scripts/check_games.sh
 
 Résultat attendu :
 
-```
-OK: tous les jeux ont un script .sh
-```
-
-Si un jeu n’a pas de script :
-
-* le script affichera une erreur.
+    OK: tous les jeux ont un script .sh
 
 ---
 
-## 9) Dépannage
+## 10) Dépannage
 
-### Le jeu n’apparaît pas dans le menu
+### Le jeu n’apparaît pas
 
-* Vérifier qu’il y a bien un dossier : `projet/NomJeu/`
-* Vérifier le nom du dossier
+- Vérifier le dossier projet/NomJeu/
+- Vérifier le nom exact du script
 
-### Le jeu se lance puis retour immédiat au menu
+### Retour immédiat au menu
 
-* Le script se termine immédiatement
-* Le jeu n’est pas lancé correctement
+- Le script se termine immédiatement
+- Le jeu ne démarre pas correctement
 
-### Le menu reste bloqué après lancement du jeu
+### Blocage du menu
 
-* Le jeu tourne toujours
-* Vérifier qu’il y a une touche pour quitter
+- Le jeu ne se ferme jamais
+- Ajouter une touche de sortie
