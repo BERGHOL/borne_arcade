@@ -33,6 +33,7 @@ sudo apt install -y \
   xdotool \
   python3 \
   python3-pygame \
+  python3-venv \
   python3-pip \
   love \
   mkdocs

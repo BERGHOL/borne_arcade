@@ -9,15 +9,17 @@ rm -rf "$DOCS_OUTPUT"
 
 echo "== Génération Javadoc =="
 
-mkdir -p "$DOCS_OUTPUT/javadoc"
+mkdir -p docs-site/javadoc
 
 javadoc \
-  -d "$DOCS_OUTPUT/javadoc" \
-  -classpath "$PROJECT_DIR/build:$PROJECT_DIR/../MG2D/build_mg2d" \
-  -Xdoclint:none \
+  -encoding UTF-8 \
+  -charset UTF-8 \
+  -docencoding UTF-8 \
   -quiet \
-  $(find "$PROJECT_DIR" -maxdepth 1 -name "*.java") \
-  || true
+  -Xdoclint:none \
+  -classpath "build_mg2d" \
+  -d docs-site/javadoc \
+  *.java || true
 
 echo "== Génération site MkDocs =="
 mkdocs build --site-dir "$DOCS_OUTPUT/site"
