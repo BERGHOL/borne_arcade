@@ -1,0 +1,27 @@
+name: release-notes
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release-notes:
+    runs-on: ubuntu-latest
+    name: release-notes
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build changelog draft
+        run: |
+          mkdir -p docs-site
+          git log --oneline -20 > docs-site/release-notes-draft.md
+
+      - name: Upload draft release notes
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-notes-draft
+          path: docs-site/release-notes-draft.md
