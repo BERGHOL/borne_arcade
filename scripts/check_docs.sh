@@ -19,6 +19,12 @@ echo "== Generation docs =="
 bash scripts/gen_docs.sh
 
 echo "== Verification sortie MkDocs =="
-test -f docs-site/site/index.html
+test -d docs-site/site
+# Depending on MkDocs config/version, home can be generated as root index
+# or as a section page. Accept either to avoid false negatives in CI.
+if [ ! -f docs-site/site/index.html ] && [ ! -f docs-site/site/README_DOCS/index.html ]; then
+  echo "ERREUR: aucune page d'accueil MkDocs detectee."
+  exit 1
+fi
 
 echo "OK: documentation valide"
