@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+# Pull main only when remote is ahead.
+# Intended for periodic execution (cron/systemd timer).
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_DIR"
@@ -11,8 +14,8 @@ LOCAL="$(git rev-parse HEAD)"
 REMOTE="$(git rev-parse origin/main)"
 
 if [ "$LOCAL" != "$REMOTE" ]; then
-  echo "== AUTOUPDATE: update trouvée -> git pull =="
+  echo "== AUTOUPDATE: mise a jour detectee -> git pull =="
   git pull --ff-only
 else
-  echo "== AUTOUPDATE: rien à faire =="
+  echo "== AUTOUPDATE: rien a faire =="
 fi

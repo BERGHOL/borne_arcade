@@ -1,18 +1,76 @@
-# Déploiement automatique via Git
+# Deploiement Git et Docs-as-Code
 
-Objectif : après un `git pull` sur la borne, le projet se recompile et se met à jour automatiquement.
+Objectif: automatiser verification, generation et publication de la documentation, sans supprimer la validation humaine.
 
-## Principe
-On utilise des Git hooks versionnés dans `.githooks/` :
-- `post-merge` : déclenché après `git pull`
-- `post-checkout` : déclenché après `git checkout`
+## 1) Principe cle
 
-Ces hooks appellent :
-- `scripts/update.sh` (rebuild + relance si service systemd configuré)
+Docs-as-Code:
+- la doc vit dans le depot,
+- la doc suit le meme cycle que le code (commit, PR, review, CI),
+- la doc est publiee automatiquement sur `main`.
 
-## Activation (à faire une seule fois sur la borne)
-Dans le dossier du dépôt :
+Regle d'or:
+- l'IA propose,
+- l'humain valide,
+- aucun merge sans checks et review.
+
+## 2) Workflow CI cible
+
+Declencheurs:
+- `pull_request`: verification docs + rapport IA.
+- `push` sur `main`: verification + publication docs.
+- `schedule` nightly: passe de controle documentaire.
+
+Garde-fous:
+- hooks locaux (`pre-commit`, `post-merge`, `post-checkout`),
+- template de PR avec checklist documentation,
+- regles de branche (approvals obligatoires, checks obligatoires).
+
+## 3) Role exact de l'IA
+
+### Usage 1: Doc patch PR
+
+Entrees minimales:
+- diff git,
+- pages docs impactees,
+- style guide.
+
+Sorties:
+- patch de documentation propose,
+- resume de changements et points a relire.
+
+### Usage 2: Doc coverage
+
+Detection des trous:
+- changement script/code sans mise a jour doc,
+- How-to manquant,
+- incoherence entre doc et implementation.
+
+### Usage 3: Release notes
+
+A chaque tag:
+- extraction commits,
+- classement par type,
+- reformulation en notes lisibles.
+
+## 4) Activation locale des hooks
 
 ```bash
-chmod +x scripts/setup_git_hooks.sh
-./scripts/setup_git_hooks.sh
+bash scripts/setup_git_hooks.sh
+```
+
+Hooks utilises:
+- `.githooks/pre-commit`
+- `.githooks/post-merge`
+- `.githooks/post-checkout`
+
+## 5) Verification locale avant PR
+
+```bash
+bash scripts/test.sh
+bash scripts/check_docs.sh
+```
+
+## 6) Publication
+
+La publication de la doc est faite par workflow GitHub Actions sur `main`.

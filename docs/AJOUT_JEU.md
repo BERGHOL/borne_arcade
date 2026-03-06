@@ -1,171 +1,84 @@
-# Documentation — Ajouter un nouveau jeu à la borne d’arcade
+# Ajouter et deployer un nouveau jeu
 
-Ce document explique comment intégrer un nouveau jeu afin qu’il soit détecté automatiquement par le menu principal.
+Ce guide explique comment integrer un jeu dans la borne.
 
----
+## 1) Regle de detection
 
-## 1) Détection automatique des jeux
+Le menu detecte les jeux avec cette convention:
+- un dossier dans `projet/NomJeu/`
+- un script de lancement `NomJeu.sh` a la racine du depot
 
-Le menu Java détecte automatiquement les jeux présents dans :
+Les deux noms doivent etre identiques.
 
-    projet/
+## 2) Structure minimale
 
-Chaque sous-dossier correspond à un jeu.
+Exemple pour `MonJeu`:
 
-Exemples :
+```text
+projet/MonJeu/
+MonJeu.sh
+```
 
-- projet/Pong/
-- projet/TronGame/
-- projet/ball-blast/
+## 3) Script de lancement attendu
 
----
+Le script doit:
+- lancer le jeu,
+- rester actif tant que le jeu tourne,
+- se terminer proprement quand le jeu se ferme.
 
-## 2) Structure obligatoire
+Exemple minimal de test:
 
-Pour un jeu nommé `MonJeu` :
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+echo "MonJeu demarre"
+sleep 2
+echo "MonJeu termine"
+```
 
-### A. Dossier du jeu
+## 4) Exemple Java
 
-Créer :
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-    projet/MonJeu/
+ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MG2D_DIR="$(cd "$ROOT_DIR/../MG2D" && pwd)"
 
-Ce dossier contient les ressources du jeu (images, sons, code, etc.).
+cd "$ROOT_DIR/projet/MonJeu"
+java -cp ".:$MG2D_DIR" Main
+```
 
-### B. Script de lancement
+## 5) Exemple Python
 
-Créer à la racine du projet :
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-    MonJeu.sh
+cd "$(dirname "$0")/projet/MonJeu"
+python3 main.py
+```
 
-Le nom du script doit être exactement identique au nom du dossier.
+## 6) Verification obligatoire
 
-Exemple :
+```bash
+bash scripts/check_games.sh
+bash scripts/test.sh
+```
 
-- dossier : projet/Pong/
-- script : Pong.sh
+Resultat attendu: aucun jeu sans script associe.
 
----
+## 7) Deploiement sur la borne
 
-## 3) Fonctionnement avec le menu
+1. Commit de la branche du jeu.
+2. PR avec mise a jour doc associee.
+3. Merge apres validation CI + review humaine.
+4. `git pull` sur la borne (ou autoupdate).
 
-Le menu lance :
+## 8) Checklist PR jeu
 
-    ./MonJeu.sh
-
-Puis attend la fin du processus (`waitFor()`).
-
-Donc :
-
-- Tant que le jeu tourne → le script doit rester actif
-- Quand le jeu se termine → le script doit se terminer
-- Ensuite → retour automatique au menu
-
-Si le jeu ne se ferme jamais → le menu restera bloqué.
-
----
-
-## 4) Script minimal de test
-
-Créer :
-
-    projet/TestJeu/
-
-Créer `TestJeu.sh` :
-
-    #!/usr/bin/env bash
-    set -e
-    echo "TestJeu démarre"
-    sleep 2
-    echo "TestJeu se termine"
-
-Rendre exécutable :
-
-    chmod +x TestJeu.sh
-
----
-
-## 5) Exemple jeu Java (avec MG2D)
-
-    #!/usr/bin/env bash
-    set -e
-
-    ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-    MG2D_DIR="$(cd "$ROOT_DIR/../MG2D" && pwd)"
-
-    cd "$ROOT_DIR/projet/MonJeu"
-    java -cp ".:$MG2D_DIR" Main
-
-Important :
-
-- Ne pas utiliser de chemin absolu (/home/pi/...)
-- MG2D doit être référencé dynamiquement
-
----
-
-## 6) Exemple jeu Python
-
-    #!/usr/bin/env bash
-    set -e
-
-    cd "$(dirname "$0")/projet/MonJeu"
-    python3 main.py
-
-Important :
-
-- Utiliser python3 (pas python3.7)
-- Installer les dépendances nécessaires (pygame, etc.)
-
----
-
-## 7) Dépendances système possibles
-
-Selon le langage utilisé :
-
-- Java → OpenJDK
-- Python → python3 + pygame
-- Lua → love2d
-- Outils graphiques → xdotool
-
-Les dépendances doivent être installées via `install.sh`.
-
----
-
-## 8) Bonnes pratiques
-
-- Prévoir une touche Quitter (ESC)
-- Éviter les chemins absolus
-- Utiliser des chemins relatifs
-- Ne pas modifier la configuration système
-- Vérifier que le jeu se termine proprement
-
----
-
-## 9) Vérification automatique
-
-Exécuter :
-
-    ./scripts/check_games.sh
-
-Résultat attendu :
-
-    OK: tous les jeux ont un script .sh
-
----
-
-## 10) Dépannage
-
-### Le jeu n’apparaît pas
-
-- Vérifier le dossier projet/NomJeu/
-- Vérifier le nom exact du script
-
-### Retour immédiat au menu
-
-- Le script se termine immédiatement
-- Le jeu ne démarre pas correctement
-
-### Blocage du menu
-
-- Le jeu ne se ferme jamais
-- Ajouter une touche de sortie
+- [ ] dossier `projet/NomJeu/` ajoute
+- [ ] script `NomJeu.sh` ajoute et executable
+- [ ] dependances documentees
+- [ ] impact utilisateur documente (guide utilisateur)
+- [ ] tests scripts passes

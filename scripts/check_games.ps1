@@ -1,10 +1,12 @@
 # scripts/check_games.ps1
+# Validate that each game directory has a matching launcher script.
+
 $ErrorActionPreference = "Stop"
 
 $PROJECT_DIR = Split-Path -Parent $PSScriptRoot
 Set-Location $PROJECT_DIR
 
-Write-Host "== Vérification des jeux =="
+Write-Host "== Verification des jeux =="
 
 if (!(Test-Path ".\projet")) {
   Write-Host "ERREUR: dossier 'projet/' introuvable"
@@ -17,7 +19,7 @@ Get-ChildItem ".\projet" -Directory | ForEach-Object {
   $game = $_.Name
   $script = ".\$game.sh"
   if (!(Test-Path $script)) {
-    Write-Host "ERREUR: script manquant pour le jeu '$game' -> attendu: $script"
+    Write-Host "ERREUR: script manquant pour le jeu '$game' (attendu: $script)"
     $fail = $true
   }
 }
