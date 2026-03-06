@@ -1,119 +1,49 @@
-# Documentation utilisateur — Borne d’arcade
+# Guide utilisateur
 
-Cette borne d’arcade permet de sélectionner et lancer différents jeux via un menu principal.
+Ce guide explique l'usage de la borne cote joueur.
 
----
+## 1) Demarrer la borne
 
-## 1) Démarrage de la borne
+Au demarrage:
+- le systeme lance le menu,
+- les jeux detectes sont affiches automatiquement,
+- aucune commande terminal n'est necessaire.
 
-Lorsque la borne est allumée :
+## 2) Naviguer dans le menu
 
-- Le système démarre automatiquement.
-- Une vérification des mises à jour est effectuée.
-- Le menu principal s’affiche.
+Par defaut:
+- joystick joueur 1: navigation haut/bas,
+- bouton A joueur 1: lancer le jeu selectionne,
+- bouton Z joueur 1: demander la fermeture du menu.
 
-Aucune manipulation clavier n’est nécessaire au démarrage.
+## 3) Lancer un jeu
 
----
+Le menu execute le script du jeu (`NomDuJeu.sh`) puis attend sa fin.
+Quand le jeu se ferme proprement, retour automatique au menu principal.
 
-## 2) Menu principal
+## 4) Quitter un jeu
 
-Le menu liste automatiquement tous les jeux disponibles.
+Chaque jeu doit fournir une commande de sortie (souvent ESC).
+Sans sortie propre, le menu peut sembler bloque.
 
-Un jeu apparaît dans le menu si :
-- Un dossier existe dans `projet/`
-- Un script de lancement `NomDuJeu.sh` existe à la racine
+## 5) En cas de probleme
 
-Le jeu sélectionné est visuellement mis en évidence.
+### Le jeu n'apparait pas
 
----
+Verifier:
+- dossier `projet/NomDuJeu/` present,
+- script `NomDuJeu.sh` present a la racine,
+- script executable.
 
-## 3) Navigation dans le menu
+### Retour immediat au menu
 
-- Utiliser le joystick du joueur 1 pour monter et descendre.
-- Le bouton **A (J1)** permet de sélectionner un jeu.
+Ca signifie generalement que le script du jeu termine trop vite ou echoue au lancement.
 
----
+### Ecran fige dans un jeu
 
-## 4) Lancer un jeu
+Le jeu ne se termine pas. Utiliser sa touche de sortie ou corriger son script de lancement.
 
-- Sélectionner un jeu avec le joystick.
-- Appuyer sur **A (J1)** pour lancer le jeu.
+## 6) Utilisation avancee
 
-Le menu :
-
-- Exécute le script correspondant (`./NomDuJeu.sh`)
-- Attend que le jeu se termine
-- Revient automatiquement au menu principal
-
----
-
-## 5) Quitter un jeu
-
-Chaque jeu doit proposer une touche de sortie (souvent ESC).
-
-Lorsque le joueur quitte le jeu :
-
-- Le jeu se ferme
-- Le script se termine
-- Retour automatique au menu
-
-Si un jeu ne propose pas de sortie, le menu peut sembler bloqué.
-
----
-
-## 6) Quitter la borne
-
-Depuis le menu principal :
-
-- Appuyer sur **Z (J1)** pour demander la fermeture.
-- Une confirmation s’affiche.
-- Appuyer sur **A (J1)** pour confirmer.
-
-Selon la configuration :
-
-- L’application peut simplement se fermer
-- Ou le système peut s’éteindre complètement
-
----
-
-## 7) Mise à jour automatique
-
-À chaque démarrage :
-
-- La borne vérifie les mises à jour du projet
-- Si une mise à jour est disponible :
-  - Le projet est recompilé
-  - La documentation est régénérée
-  - Le service est redémarré automatiquement
-
-La borne fonctionne de manière autonome.
-
----
-
-## 8) Problèmes possibles
-
-### Un jeu ne se lance pas
-
-Vérifier :
-
-- Le dossier `projet/NomDuJeu/` existe
-- Le script `NomDuJeu.sh` existe
-- Le script est exécutable :
-
-    chmod +x NomDuJeu.sh
-
----
-
-### Le menu semble bloqué
-
-- Le jeu est encore en cours d’exécution
-- Vérifier qu’il existe une touche de sortie dans le jeu
-
----
-
-## 9) Utilisateur avancé
-
-- Les contrôles peuvent dépendre du mapping clavier de la borne
-- Les jeux peuvent utiliser Java, Python ou Love2D
-- Le menu attend la fin complète du jeu avant de reprendre la main
+Selon les jeux, les dependances peuvent differer (Java, Python, Love2D).
+Le menu principal reste identique: il lance un script et attend sa fin.

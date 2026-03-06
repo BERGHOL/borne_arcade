@@ -15,10 +15,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build changelog draft
+      - name: Generate release notes draft
         run: |
-          mkdir -p docs-site
-          git log --oneline -20 > docs-site/release-notes-draft.md
+          python3 scripts/generate_release_notes.py
 
       - name: Upload draft release notes
         uses: actions/upload-artifact@v4

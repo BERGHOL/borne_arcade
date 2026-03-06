@@ -269,12 +269,17 @@ public class Graphique {
     }
     
     public static void lectureMusiqueFond() {
+    	if(tableauMusiques == null || cptMus <= 0){
+    	    return;
+    	}
     	musiqueFond = new Bruitage ("sound/bg/"+tableauMusiques[(int)(Math.random()*cptMus)]);
     	musiqueFond.lecture();
     }
 	
 	public static void stopMusiqueFond(){
-		musiqueFond.arret();
+		if(musiqueFond != null){
+		    musiqueFond.arret();
+		}
 	}
 	
 	public static void afficherTexte(int valeur){

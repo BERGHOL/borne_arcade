@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(git rev-parse --show-toplevel)"
+cd "$ROOT_DIR"
+
+JAVA_CHANGED=0
+DOC_CHANGED=0
+
+while IFS= read -r file; do
+  case "$file" in
+    *.java|scripts/*.sh|scripts/*.ps1|mkdocs.yml|README.md)
+      JAVA_CHANGED=1
+      ;;
+  esac
+
+  case "$file" in
+    docs/*|README.md|mkdocs.yml)
+      DOC_CHANGED=1
+      ;;
+  esac
+done < <(git diff --cached --name-only)
+
+if [ "$JAVA_CHANGED" -eq 1 ] && [ "$DOC_CHANGED" -eq 0 ]; then
+  echo "ERREUR: changements code/scripts detectes sans mise a jour documentaire staged."
+  echo "Ajoute au moins un fichier de doc (docs/*, README.md ou mkdocs.yml) ou justifie en PR."
+  exit 1
+fi
+
+echo "OK: pre-commit documentation"

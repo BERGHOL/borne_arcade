@@ -1,16 +1,22 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
+
+# Build documentation artifacts:
+# - docs-site/javadoc from Java sources
+# - docs-site/site from MkDocs markdown pages
 
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DOCS_OUTPUT="$PROJECT_DIR/docs-site"
 
+cd "$PROJECT_DIR"
+
 echo "== Nettoyage ancien site =="
 rm -rf "$DOCS_OUTPUT"
 
-echo "== Génération Javadoc =="
+mkdir -p "$DOCS_OUTPUT/javadoc"
 
-mkdir -p docs-site/javadoc
-
+echo "== Generation Javadoc =="
+# Non-blocking on javadoc errors so docs site can still be published.
 javadoc \
   -encoding UTF-8 \
   -charset UTF-8 \
@@ -18,12 +24,12 @@ javadoc \
   -quiet \
   -Xdoclint:none \
   -classpath "build_mg2d" \
-  -d docs-site/javadoc \
+  -d "$DOCS_OUTPUT/javadoc" \
   *.java || true
 
-echo "== Génération site MkDocs =="
+echo "== Generation site MkDocs =="
 mkdocs build --site-dir "$DOCS_OUTPUT/site"
 
-echo "== Documentation générée dans :"
-echo "   - $DOCS_OUTPUT/site"
-echo "   - $DOCS_OUTPUT/javadoc"
+echo "== Documentation generee dans: =="
+echo "- $DOCS_OUTPUT/site"
+echo "- $DOCS_OUTPUT/javadoc"

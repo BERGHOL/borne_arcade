@@ -1,86 +1,98 @@
-# Installation de la borne d’arcade
+# Installation de la borne arcade
 
-## 1. Prérequis
+Ce guide couvre l'installation complete sur Raspberry Pi OS / Debian.
 
-- Raspberry Pi 3 Model B (minimum)
-- Raspberry Pi OS récent (Desktop recommandé)
-- Connexion Internet
-- Utilisateur avec droits sudo (ex : arcade)
+## 1) Prerequis
 
----
+- Raspberry Pi 3 ou plus recent (recommande).
+- Raspberry Pi OS (ou Debian) avec acces Internet.
+- Utilisateur avec droits sudo.
+- Depot `borne_arcade` clone localement.
 
-## 2. Installation initiale du système
+## 2) Preparation systeme
 
-Mettre à jour le système :
+Depuis un terminal:
 
-    sudo apt update
-    sudo apt upgrade -y
+```bash
+sudo apt update
+sudo apt upgrade -y
+sudo apt install -y git
+```
 
-Installer git si nécessaire :
+## 3) Cloner le projet
 
-    sudo apt install -y git
+```bash
+git clone https://github.com/BERGHOL/borne_arcade.git
+cd borne_arcade
+```
 
----
+## 4) Installation automatique
 
-## 3. Clonage du projet
+Lancer:
 
-    git clone https://github.com/BERGHOL/borne_arcade.git
-    cd borne_arcade
+```bash
+bash scripts/install.sh
+```
 
----
+Le script:
+- installe Java, Python, Love2D, MkDocs et utilitaires,
+- verifie/clone MG2D,
+- applique les permissions sur les scripts,
+- configure les hooks git si disponibles,
+- compile le projet,
+- tente de generer la documentation.
 
-## 4. Installation automatique
+## 5) Demarrage automatique du menu
 
-Lancer le script d’installation :
+Option A (recommandee): provisionnement complet (installe aussi un service user)
 
-    ./scripts/install.sh
+```bash
+bash scripts/provision.sh
+```
 
-Ce script :
+Option B: lancement manuel
 
-- Installe Java (OpenJDK)
-- Installe Python3 et pygame
-- Installe Love2D
-- Installe xdotool
-- Clone automatiquement la bibliothèque MG2D
-- Compile le projet
-- Configure les hooks Git
-- Génère la documentation
+```bash
+bash scripts/run.sh
+```
 
----
+## 6) Verification apres installation
 
-## 5. Activation du lancement automatique au démarrage
+Verifier les points suivants:
+- build present (`build/` et `build_mg2d/`),
+- menu lancable,
+- documentation generable.
 
-Installer le service systemd :
+Commandes utiles:
 
-    sudo cp scripts/borne-arcade.service /etc/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl enable borne-arcade.service
+```bash
+bash scripts/test.sh
+bash scripts/check_docs.sh
+bash scripts/run.sh
+```
 
-Redémarrer :
+## 7) Mise a jour
 
-    sudo reboot
+En local:
 
----
+```bash
+git pull
+```
 
-## 6. Fonctionnement automatique
+Si les hooks sont actifs, `scripts/update.sh` est execute automatiquement.
 
-Au démarrage de la borne :
+## 8) Problemes frequents
 
-1. Vérification des mises à jour Git
-2. Rebuild automatique si nécessaire
-3. Génération automatique de la documentation
-4. Lancement du menu principal
+### MG2D introuvable
 
-La borne est entièrement autonome.
+- Verifier que `../MG2D/MG2D` existe.
+- Relancer `bash scripts/install.sh`.
 
----
+### mkdocs introuvable
 
-## 7. Mise à jour manuelle (si nécessaire)
+- Installer: `sudo apt install -y mkdocs`
 
-    git pull
+### Echec de build Java
 
-La mise à jour déclenche automatiquement :
-
-- Rebuild
-- Régénération de la documentation
-- Redémarrage du service
+- Verifier la version Java installee.
+- Relancer `bash scripts/build.sh` et lire l'erreur complete.

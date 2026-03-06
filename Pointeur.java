@@ -1,11 +1,8 @@
 import java.io.IOException;
+import java.io.File;
 
 import MG2D.geometrie.Texture;
-import MG2D.Couleur;
 import MG2D.geometrie.Point;
-import MG2D.geometrie.Triangle;
-import MG2D.Clavier;
-
 
 public class Pointeur {
     private int value;
@@ -15,7 +12,6 @@ public class Pointeur {
 
     public Pointeur(){
 	this.triangleGauche = new Texture("img/star.png", new Point(30, 492), 40,40);
-	// this.triangleDroite = new Triangle(Couleur .ROUGE, new Point(550, 560), new Point(520, 510), new Point(550, 460), true);
 	this.triangleDroite = new Texture("img/star.png", new Point(530, 492), 40,40);
 	this.rectangleCentre = new Texture("img/select2.png", new Point(80, 460), 440, 100);
 	this.value = Graphique.tableau.length-1;
@@ -23,21 +19,27 @@ public class Pointeur {
 
     public void lancerJeu(ClavierBorneArcade clavier){
 	if(clavier.getBoutonJ1ATape()){
-
-	    //System.out.println(Graphique.tableau[getValue()].getChemin());
+	    String script = "./"+Graphique.tableau[getValue()].getNom()+".sh";
+	    Graphique.stopMusiqueFond();
 	    try {
-		Graphique.stopMusiqueFond();
-		Process process = Runtime.getRuntime().exec("./"+Graphique.tableau[getValue()].getNom()+".sh");
-		process.waitFor();		//ajouté afin d'attendre la fin de l'exécution du jeu pour reprendre le contrôle sur le menu
-		Graphique.lectureMusiqueFond();
-	    } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    } catch(Exception e){	//on catche toutes les exceptions, nécessaire pour le waitFor()
-			e.printStackTrace();
+		File scriptFile = new File(script);
+		if(!scriptFile.exists()){
+		    System.err.println("Script introuvable : "+script);
+		    return;
 		}
-
-	    //System.out.println("le process sur "+Graphique.tableau[getValue()].getChemin()+" est bien lancé");
+		ProcessBuilder pb = new ProcessBuilder("bash", script);
+		pb.directory(new File("."));
+		Process process = pb.start();
+		process.waitFor(); // attend la fin du jeu avant de revenir au menu
+	    } catch (IOException e) {
+		System.err.println("Impossible de lancer le script du jeu : "+script);
+		e.printStackTrace();
+	    } catch(InterruptedException e){
+		Thread.currentThread().interrupt();
+		System.err.println("Lancement du jeu interrompu : "+script);
+	    } finally {
+		Graphique.lectureMusiqueFond();
+	    }
 	}
     }
 

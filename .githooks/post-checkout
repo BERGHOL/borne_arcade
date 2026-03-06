@@ -1,5 +1,5 @@
-#!usr/bin/env bash
+#!/usr/bin/env bash
 set -e
 
-echo "== Git post-checkout: mise à jour de la borne =="
+echo "== Git post-checkout: mise a jour de la borne =="
 bash scripts/update.sh
