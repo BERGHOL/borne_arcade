@@ -338,3 +338,7 @@ La borne peut désormais être :
 - Mise à jour via Git
 - Relancée automatiquement en cas de crash
 - Maintenue durablement dans le temps
+
+---
+
+La documentation suit une approche Docs-as-Code : elle est versionnée dans Git, contrôlée par pull request, validée par des checks CI, puis publiée automatiquement. Une IA intervient comme assistant de rédaction : elle analyse les diffs, produit un rapport de revue documentaire, et peut proposer des mises à jour. Le merge reste conditionné à une validation humaine et à la réussite des tests.
